@@ -24,12 +24,13 @@ function formatOutput(arr) {
 
 var findByName = `SELECT first_name, last_name, birthdate 
 				FROM famous_people
-				WHERE first_name = $1::text
+				WHERE first_name = $1::text OR last_name = $1::text
 				ORDER BY last_name;`
 
 client.connect((err) => {
 	if (err) {
 		return console.log("error running query", err);
+		client.end()
 	}
 	console.log("Searching...")
 	client.query((findByName), 
@@ -39,5 +40,6 @@ client.connect((err) => {
       		return console.error("error running query", err);
     	}
     	formatOutput(result);
+    	client.end()
 	})
 })
